@@ -59,15 +59,15 @@ int white = 1600;
 void followLine2(int type){
     if (type == 0){
         while (digital(0) == 0){
-          if (analog(leftlight) < white && analog(rightlight) < white){
+          if (analog(leftlight) <= white && analog(rightlight) <= white){
           	motor(left, -10);
             motor(right, 10);
           }
-          else if (analog(leftlight) > white && analog(rightlight) < white){
+          else if (analog(leftlight) > white && analog(rightlight) <= white){
             motor(left, -10);
             motor(right, 70);
           }
-          else if (analog(leftlight) < white && analog(rightlight) > white){
+          else if (analog(leftlight) <= white && analog(rightlight) > white){
             motor(left, 70);
             motor(right, -10);
           }
@@ -82,17 +82,17 @@ void followLine2(int type){
     }
 }
 
-void followLine(int type, int port){
+void followLine(int type, int port, int direction){
     if (type == 0){
         while (digital(0) == 0){
-          if (analog(port) < white){
-          	motor(left, 10);
-            motor(right, 70);
-          }
-          else if (analog(port) > white){
-            motor(left, 70);
-            motor(right, 70);
-          }
+            if (analog(port) < white){
+                motor(left, 90*direction);
+                motor(right, 5*direction);
+            }
+            else if (analog(port) > white){
+                motor(left, 5*direction);
+                motor(right, 90*direction);
+            }
         }
     }
 }
@@ -116,14 +116,46 @@ void lineSquare(int speed){
       }
     }
 }
+
+void servo(int servoNum, int finalPos, int endTime, int up){
+  int startPos = get_servo_position(servoNum);
+  int currentPos = startPos;
+  double startTime = 0;
+  double currentTime = startTime;
+  double timePercent;
+  int waitFactor;
+  
+  enable_servos();
+  while ((currentPos*up) < (finalPos*up)){
+    currentTime += .1;
+    timePercent = (currentTime-startTime) / (endTime-startTime);
+    currentPos = (timePercent*(finalPos-startPos)) + startPos;
+    waitFactor = (currentTime*currentTime)*0.1; 
+        
+    set_servo_position(servoNum,currentPos);
+    msleep(waitFactor);
+  }
+  disable_servos();
+}
+
     
 int main(){
     
-    //lineSquare(1000);
+    servo(0,1600,20,1);
     
-    //driveDirect(1500, 1000, 500, right);
+    driveDirect(3000, 1000, 780, right);
+    
+    servo(0,600,15,-1);
+    
+    //turnRight(1000,800);
 
-    followLine2(0);
+    followLine(0, 5, 1);
+    
+    driveDirect(1,0,1, right);
+    
+    servo(0,1600,20,1);
+    
+    drive(1000, -750);
     
     return 0;
 }
