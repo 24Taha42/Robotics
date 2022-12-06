@@ -1,0 +1,102 @@
+#include <kipr/wombat.h>
+
+int main()
+{
+    printf("Hello World\n");
+    
+    //3=left
+    //0=right
+    
+    //0=arm
+    //3=hand
+    
+    enable_servos();
+        
+    set_servo_position(3,1000);///open claw
+    msleep(500);
+        
+    set_servo_position(0,1600);///lower arm
+    msleep(500);
+    
+    //motor(0, 78);///turn towards black line
+    //motor(3, 5);
+    //msleep(900);
+    
+    //motor(0, 78);///go to black line
+    //motor(3, 74);
+    //msleep(750);
+    
+    while (analog(0) < 2300)///Find Line
+    {
+    motor(0,78);
+    motor(3,74);
+    }
+    ao();
+    msleep(300);
+    
+    int counter = 0;
+    
+    while (counter < 2500)///Follow certain # of times
+    {
+    if (analog(0) > 2000)
+    {
+    motor(3, 90);
+    motor(0, 5);
+    counter = counter + 1;
+    }
+          
+    else
+    {
+    motor(3, 5);
+    motor(0, 90);
+    counter = counter + 1;
+    }
+    }
+    
+    ao();
+    msleep(200);
+    
+
+    ///pickup botgal
+    set_servo_position(3,300);
+    msleep(500);
+    
+    set_servo_position(0,300);
+    msleep(500);
+    
+    ao();
+    msleep(200);
+    
+    motor(3,-100);///turn towards big box
+    motor(0,10);
+    msleep(1800);
+    
+    ao();
+    msleep(200);
+    
+    int x=0;///go to big box
+    for(x=0; x<12; x++){
+        
+    motor(3,89);
+    motor(0,100);
+    msleep(500);
+    }    
+        
+    ao();
+    msleep(200);
+    
+    set_servo_position(3,1000);///open claw
+    msleep(500);
+        
+    set_servo_position(0,1600);///lower arm
+    msleep(500);
+    
+    disable_servos();
+    
+    
+    
+        
+    
+    return 0;
+}
+
