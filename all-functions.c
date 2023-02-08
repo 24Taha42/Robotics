@@ -11,11 +11,13 @@ int leftTouch = 0;
 int rightTouch = 1;
 int white = 1600;
 
+// Input any integer and it will return -1 if it is negative, 1 if it is positive, and 0 if it is 0
 int sign(int x){
     if (x > 0) return 1;
     if (x < 0) return -1;
     return 0;}
 
+// Moves the robot forward {distance} at {speed} using move at velocity mav() function
 void drive(int distance, int speed){
   cmpc(left);
   while (abs(gmpc(left)) < distance){
@@ -27,6 +29,7 @@ void drive(int distance, int speed){
   msleep(15);
 }
 
+// Turns the robot left a certain amount {distance} at a certain {speed} 
 void turnLeft(int distance, int speed){
   cmpc(right);
   while (gmpc(right) < distance){
@@ -38,6 +41,7 @@ void turnLeft(int distance, int speed){
   msleep(15);
 }
 
+// Turns the robot right a certain amount {distance} at a certain {speed} 
 void turnRight(int distance, int speed){
   cmpc(left);
   while (gmpc(left) < distance){
@@ -49,6 +53,7 @@ void turnRight(int distance, int speed){
   msleep(15);
 }
 
+// Inspired by the create dirveDirect() function, this takes a {distance}, speed of the left motor {leftSpeed}, speed of the right motor {rightSpeed}, and which motor is used for motor position counting
 void driveDirect(int distance, int leftSpeed, int rightSpeed, int countMotor){
   cmpc(countMotor);
   while (abs(gmpc(countMotor)) < distance){
@@ -60,6 +65,7 @@ void driveDirect(int distance, int leftSpeed, int rightSpeed, int countMotor){
   msleep(15);
 }
 
+// A function that is used for the follow the line function
 void followLineBase(int prt, int spd){
     int error = analog(prt) - 1700;
     float speed_mod = error * 0.07;
@@ -67,6 +73,7 @@ void followLineBase(int prt, int spd){
     mav(right,spd+speed_mod);
 }
 
+// A function that is used for the follow the line function backward
 void followLineBaseBack(int prt, int spd){
     int error = analog(prt) - 1700;
     float speed_mod = error * 0.07;
@@ -74,6 +81,7 @@ void followLineBaseBack(int prt, int spd){
     mav(right,spd+speed_mod);
 }
 
+// This function has two types. The first type is to follow the line forward. 
 void followLine(int type, int port, int speed, int displacement){
     if (type == 0){
         if (sign(speed) == 1){
