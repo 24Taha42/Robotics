@@ -17,6 +17,17 @@ int sign(int x){
     if (x < 0) return -1;
     return 0;}
 
+// Written by chatGPT: takes a value between 0 and 1 and outputs another value between 0 & 1 using the cubic ease in out function (see easings.net/#easeInOutCubic)
+double cubicEaseInOut(float t) {
+	if (t < 0.5) {
+		return 0.5 * t * t * t;
+	}
+	else {
+		float f = 2 * t - 2;
+		return 0.5 * (f * f * f + 2);
+	}
+}
+
 // Moves the robot forward {distance} at {speed} using move at velocity mav() function
 void drive(int distance, int speed){
   cmpc(left);
@@ -81,7 +92,8 @@ void followLineBaseBack(int prt, int spd){
     mav(right,spd+speed_mod);
 }
 
-// This function has two types. The first type is to follow the line forward. 
+// This function has two types. The first type is to follow the line forward until the touch sensor (in digital port 0) is activated.
+// The second is to follow the line for a given number of motor position counters (variable displacement).
 void followLine(int type, int port, int speed, int displacement){
     if (type == 0){
         if (sign(speed) == 1){
@@ -125,17 +137,15 @@ void lineSquare(int speed){
 void servo(int servoNum, int finalPos, int endTime, int up){
   int startPos = get_servo_position(servoNum);
   int currentPos = startPos;
-  double startTime = 0;
-  double currentTime = startTime;
+  double startTime = seconds();
   double timePercent;
   int waitFactor;
   
   enable_servos();
   while ((currentPos*up) < (finalPos*up)){
-    currentTime += .1;
-    timePercent = (currentTime-startTime) / (endTime-startTime);
+    timePercent = (seconds()-startTime) / (endTime-startTime);
     currentPos = (timePercent*(finalPos-startPos)) + startPos;
-    waitFactor = (currentTime*currentTime)*0.1; 
+    waitFactor = (seconds()*seconds())*0.01; 
         
     set_servo_position(servoNum,currentPos);
     msleep(waitFactor);
