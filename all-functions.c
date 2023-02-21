@@ -144,7 +144,7 @@ void servo(int servoNum, int finalPos, int endTime, int up){
   enable_servos();
   while ((currentPos*up) < (finalPos*up)){
     timePercent = (seconds()-startTime) / (endTime-startTime);
-    currentPos = (timePercent*(finalPos-startPos)) + startPos;
+    currentPos = (cubicEaseInOut(timePercent)*(finalPos-startPos)) + startPos;
     waitFactor = (seconds()*seconds())*0.01; 
         
     set_servo_position(servoNum,currentPos);
