@@ -86,10 +86,10 @@ void followLineBase(int prt, int spd){
 
 // A function that is used for the follow the line function backward
 void followLineBaseBack(int prt, int spd){
-    int error = analog(prt) - 1700;
+    int error = analog(prt) - 4000;
     float speed_mod = error * 0.07;
-    mav(left,spd-speed_mod);
-    mav(right,spd+speed_mod);
+    mav(left,spd - speed_mod);
+    mav(right,spd + speed_mod);
 }
 
 // This function has two types. The first type is to follow the line forward until the touch sensor (in digital port 0) is activated.
