@@ -78,16 +78,16 @@ void driveDirect(int distance, int leftSpeed, int rightSpeed, int countMotor){
 
 // A function that is used for the follow the line function
 void followLineBase(int prt, int spd){
-    int error = analog(prt) - 1700;
-    float speed_mod = error * 0.07;
+    int error = analog(prt) - 3200;
+    float speed_mod = error * 0.05;
     mav(left,spd-speed_mod);
     mav(right,spd+speed_mod);
 }
 
 // A function that is used for the follow the line function backward
 void followLineBaseBack(int prt, int spd){
-    int error = analog(prt) - 4000;
-    float speed_mod = error * 0.07;
+    int error = analog(prt) - 3200;
+    float speed_mod = error * 0.05;
     mav(left,spd - speed_mod);
     mav(right,spd + speed_mod);
 }
