@@ -98,7 +98,7 @@ void followLine(int type, int port, int speed, int displacement){
     if (type == 0){
         if (sign(speed) == 1){
             while (digital(0) == 0){
-                followLineBase(port, speed); } } }
+                followLineBase(port, speed); } }
         else if (sign(speed) == -1){
             while (digital(0) == 0){
                 followLineBaseBack(port, speed); } } }
@@ -110,7 +110,6 @@ void followLine(int type, int port, int speed, int displacement){
         else if (sign(speed) == -1){
             while (gmpc(left) > displacement){
         		followLineBaseBack(port, speed); } } }
-}
 
 /* In beta
 void lineSquare(int speed){
