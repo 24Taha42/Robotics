@@ -156,8 +156,9 @@ void servo(int servoNum, int finalPos, int endTime, int up){
 
 int main()
 {
-    
-    followLine(0, 1, -750, 10000);
+    wait_for_light(2);
+    shut_down_in(118);
+    followLine(0, 1, 750, 10000);
     
     return 0;
 }
