@@ -1,7 +1,7 @@
 #include <kipr/wombat.h>
 #include <stdlib.h>
 
-// altered so that motors goes backward
+// backward = toward craney push push arm with reactangle at end
 
 int left = 0;
 int right = 3;
@@ -42,6 +42,9 @@ void drive(int distance, int speed){
 
 // Turns the robot left a certain amount {distance} at a certain {speed} 
 void turnLeft(int distance, int speed){
+  if (sign(speed) < 0){
+      right = 0;
+  }
   cmpc(right);
   while (gmpc(right) < distance){
     mav(left, -speed);
@@ -50,10 +53,15 @@ void turnLeft(int distance, int speed){
   mav(left,0);
   mav(right,0);
   msleep(15);
+  left = 0;
+  right = 3;
 }
 
 // Turns the robot right a certain amount {distance} at a certain {speed} 
 void turnRight(int distance, int speed){
+  if (sign(speed) < 0){
+      left = 3;
+  }
   cmpc(left);
   while (gmpc(left) < distance){
     mav(left, speed);
@@ -62,6 +70,8 @@ void turnRight(int distance, int speed){
   mav(left,0);
   mav(right,0);
   msleep(15);
+  left = 0;
+  right = 3;
 }
 
 // Inspired by the create dirveDirect() function, this takes a {distance}, speed of the left motor {leftSpeed}, speed of the right motor {rightSpeed}, and which motor is used for motor position counting
@@ -78,18 +88,18 @@ void driveDirect(int distance, int leftSpeed, int rightSpeed, int countMotor){
 
 // A function that is used for the follow the line function
 void followLineBase(int prt, int spd){
-    int error = analog(prt) - 3200;
-    float speed_mod = error * 0.05;
+    int error = analog(prt) - 3000;
+    float speed_mod = error * 0.03;
     mav(left,spd-speed_mod);
     mav(right,spd+speed_mod);
 }
 
 // A function that is used for the follow the line function backward
 void followLineBaseBack(int prt, int spd){
-    int error = analog(prt) - 3200;
-    float speed_mod = error * 0.05;
-    mav(left, spd + speed_mod);
-    mav(right, spd - speed_mod);
+    int error = analog(prt) - 3000;
+    float speed_mod = error * 0.03;
+    mav(left, spd - speed_mod);
+    mav(right, spd + speed_mod);
 }
 
 // This function has two types. The first type is to follow the line forward until the touch sensor (in digital port 0) is activated.
@@ -161,17 +171,17 @@ int main()
     //wait_for_light(2);
     shut_down_in(118);
     
-    // go forward a little
-    drive(100,750);
+    // go backward a little
+    //drive(100,-750);
     
-    //turn left
-    turnLeft(500,250);
+    // turn backward right
+    turnRight(200,-250);
     
-    // turn right
-    turnRight(400,200);
+    // turn backward left
+    //turnRight(-400,-200);
     
     //follow the line toward botgall until the touch sensor is pressed. 
-    followLine(0, 4, -750, 0);
+    //followLine(0, 4, -750, 0);
     
     return 0;
 }
