@@ -70,7 +70,20 @@ void driveDirect(int ticks, int leftSpeed, int rightSpeed, int countMotor){
 }
 
 // Purpose: following the black line
-
+// Follows the left side of the line forward
+// This function has 3 inputs: 
+// 1. The port number of the light sensor with which you are following the line- you can input leftlight or rightlight (as you assigned them each a number) or a custom number
+// 2. The port number of a touch sensor you want to use to tell if the robot is crashing into a wall- you can input lefttouch or righttouch (as you assigned them each a number) or a custom number
+// 3. The number of seconds you want to move before ending the line follow- must be a natural number (1,2,3,etc.)
+void mega_line_follow_left(int port, int touchport, int ticks, int time) {
+    float starttime = seconds(); // sets the starttime of the function equal to the number of seconds since the run began
+    while (digital(touchport) == 0 && seconds() - starttime < time) { 
+        // while a) the touch sensor specified is not pressed, b) the left motor hasn't moved a specified number of ticks, AND c) the number of seconds specified has not elapsed, do the following:
+        if (port < black) { mav(left, 1453); mav(right, 960); } // if the specified light sensor does not see black, go forward while curving to the right
+        else if (port >= black) { mav(left, 960); mav(right, 1453); } // if the specified light sensor does see black, go forward while curving to the left
+    }
+    // ^^ having so many checks can be useful to ensure you're robot doesn't go too far off course, but you'll rarely ever use all of the variables
+}
 
 // Purpose: two-sensor black line squareup
 // Moves the robot forward at a specified {speed}, turning so that the robot is perpendicular to the black line
