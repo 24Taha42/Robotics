@@ -14,12 +14,6 @@ int white = 700; // this is the maximum value that should be returned by your an
 int black = 3200; // this is the minimum value that should be returned by your analog sensors when they see black. You may need to adjust this
 int drift_mod = 0; // this variable exists to offset any drift your robot has. This modification is applied to the left side, so if your robot is drifting right, it should be negative and if it is drifting left it should be positive
 
-// Input any integer and it will return -1 if it is negative, 1 if it is positive, and 0 if it is 0
-int sign(int x){
-    if (x > 0) return 1; // if the input is positive, return 1
-    else if (x < 0) return -1; // if the input is negative, return -1
-    return 0;} // if the input is neither positive nor negative, return 0
-
 // This function has no inputs. It assumes you are following the left side of the line with one port only, specifically the one associated with the variable leftlight
 void follow_line_1() {
     while (1 == 1) { // the following code will run indefinetely because one always equals one
