@@ -6,8 +6,8 @@ int left = 0; // this allows you to assign a variable for the left motor's port 
 int right = 3; // this allows you to assign a variable for the right motor's port number
 int leftlight = 5; // this allows you to assign a variable for the left light (analog) sensor's port number. If you only have 1 light sensor, use this variable only
 int rightlight = 4; // this allows you to assign a variable for the right light (analog) sensor's port number. This can also be used as a secondary variable
-int leftTouch = 4; // this allows you to assign a variable for the left touch (digital) sensor's port number. If you only have 1 touch sensor, use this variable only
-int rightTouch = 1; // this allows you to assign a variable for the right touch (digital) sensor's port number. This can also be used as a secondary variable
+int lefttouch = 4; // this allows you to assign a variable for the left touch (digital) sensor's port number. If you only have 1 touch sensor, use this variable only
+int righttouch = 1; // this allows you to assign a variable for the right touch (digital) sensor's port number. This can also be used as a secondary variable
 int white = 700; // this is the maximum value that should be returned by your analog sensors when they see white. You may need to adjust this
 int black = 3200; // this is the minimum value that should be returned by your analog sensors when they see black. You may need to adjust this
 int drift_mod = 0; // this variable exists to offset any drift your robot has. This modification is applied to the left side, so if your robot is drifting right, it should be negative and if it is drifting left it should be positive
@@ -91,10 +91,10 @@ void followLineBaseBack(int prt, int spd){
 void followLine(int type, int port, int speed, int displacement){
     if (type == 0){
         if (sign(speed) == 1){
-            while (digital(leftTouch) == 0){
+            while (digital(lefttouch) == 0){
                 followLineBase(port, speed); } } 
         else if (sign(speed) == -1){
-            while (digital(leftTouch) == 0){
+            while (digital(lefttouch) == 0){
                 followLineBaseBack(port, speed); } } }
     else if (type == 1){
         cmpc(left);
