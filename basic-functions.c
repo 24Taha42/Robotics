@@ -70,40 +70,7 @@ void driveDirect(int ticks, int leftSpeed, int rightSpeed, int countMotor){
 }
 
 // Purpose: following the black line
-// A function that is used for the follow the line function
-void followLineBase(int prt, int spd){
-    int error = analog(prt) - black - 100; // determine how black the light sensor sees
-    float speed_mod = error * 0.05; // use the number from previous line to modify the speed of the the motors (the whiter, the bigger the speed modification)
-    mav(left,spd-speed_mod); // turn more left the whiter it is
-    mav(right,spd+speed_mod); // turn more left the whiter it is
-}
 
-// A function that is used for the follow the line function backward
-void followLineBaseBack(int prt, int spd){
-    int error = analog(prt) - 3000;
-    float speed_mod = error * 0.03;
-    mav(left, spd - speed_mod);
-    mav(right, spd + speed_mod);
-}
-
-// This function has two types. The first type is to follow the line forward until the touch sensor (in digital port 0) is activated.
-// The second is to follow the line for a given number of motor position counters (variable displacement).
-void followLine(int type, int port, int speed, int displacement){
-    if (type == 0){
-        if (sign(speed) == 1){
-            while (digital(lefttouch) == 0){
-                followLineBase(port, speed); } } 
-        else if (sign(speed) == -1){
-            while (digital(lefttouch) == 0){
-                followLineBaseBack(port, speed); } } }
-    else if (type == 1){
-        cmpc(left);
-        if (sign(speed) == 1){
-            while (gmpc(left) < displacement){
-                followLineBase(port, speed); } } }
-    else if (sign(speed) == -1){
-        while (gmpc(left) > displacement){
-            followLineBaseBack(port, speed); } } }
 
 // Purpose: two-sensor black line squareup
 // Moves the robot forward at a specified {speed}, turning so that the robot is perpendicular to the black line
