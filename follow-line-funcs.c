@@ -18,12 +18,12 @@ int drift_mod = 0; // this variable exists to offset any drift your robot has. T
 void follow_line_1() {
     while (1 == 1) { // the following code will run indefinetely because one always equals one
         if (leftlight < black) { // if the light sensor does not see black, do the following:
-            mav(left, 1453); // go forward with the left motor at a very high speed
+            mav(left, 1453 + drift_mod); // go forward with the left motor at a very high speed
             mav(right, 960); // go forward with the right motor at a slower speed
             // combined, this means that the robot is going forward while turning to the right
         }
         else if (leftlight >= black) { // if the light sensor does see black, do the following:
-            mav(left, 960); // go forward with the left motor at a slower speed
+            mav(left, 960 + drift_mod); // go forward with the left motor at a slower speed
             mav(right, 1453); // go forward with the right motor at a very high speed
             // combined, this means that the robot is going forward while turning to the left
         }
@@ -36,12 +36,12 @@ void follow_line_1() {
 void follow_line_2(int port) {
     while (digital(lefttouch) == 0) { // while the left (primary) touch sensor is not pressed, do the following:
         if (port < black) { // if the specified light sensor does not see black, do the following:
-            mav(left, 1453); // go forward with the left motor at a very high speed
+            mav(left, 1453 + drift_mod); // go forward with the left motor at a very high speed
             mav(right, 960); // go forward with the right motor at a slower speed
             // combined, this means that the robot is going forward while turning to the right
         }
         else if (port >= black) { // if the specified light sensor does see black, do the following:
-            mav(left, 960); // go forward with the left motor at a slower speed
+            mav(left, 960 + drift_mod); // go forward with the left motor at a slower speed
             mav(right, 1453); // go forward with the right motor at a very high speed
             // combined, this means that the robot is going forward while turning to the left
         }
@@ -55,12 +55,12 @@ void follow_line_3(int port, int ticks) {
     cmpc(left); // clear the left motor's position counter
     while (gmpc(left) < ticks) { // while the left motor has not moved the number of ticks specified, do the following:
         if (port < black) { // if the specified light sensor does not see black, do the following:
-            mav(left, 1453); // go forward with the left motor at a very high speed
+            mav(left, 1453 + drift_mod); // go forward with the left motor at a very high speed
             mav(right, 960); // go forward with the right motor at a slower speed
             // combined, this means that the robot is going forward while curving to the right
         }
         else if (port >= black) { // if the specified light sensor does see black, do the following:
-            mav(left, 960); // go forward with the left motor at a slower speed
+            mav(left, 960 + drift_mod); // go forward with the left motor at a slower speed
             mav(right, 1453); // go forward with the right motor at a very high speed
             // combined, this means that the robot is going forward while curving to the left
         }
@@ -73,8 +73,8 @@ void follow_line_3(int port, int ticks) {
 void follow_line_4(int port, int time) {
     float starttime = seconds(); // sets the starttime of the function equal to the number of seconds since the run began
     while (seconds()-starttime < time) { // while the number of seconds specified has not elapsed, do the following:
-        if (port < black) { mav(left, 1453); mav(right, 960); } // if the specified light sensor does not see black, go forward while curving to the right
-        else if (port >= black) { mav(left, 960); mav(right, 1453); } // if the specified light sensor does see black, go forward while curving to the left
+        if (port < black) { mav(left, 1453 + drift_mod); mav(right, 960); } // if the specified light sensor does not see black, go forward while curving to the right
+        else if (port >= black) { mav(left, 960 + drift_mod); mav(right, 1453); } // if the specified light sensor does see black, go forward while curving to the left
         // the statements above are each multiple lines smushed into one- yes, you can do that
     }
 }
@@ -90,8 +90,8 @@ void mega_line_follow_left(int port, int touchport, int ticks, int time) {
     cmpc(left); // clear the left motor's position counter
     while (digital(touchport) == 0 && gmpc(left) < ticks && seconds() - starttime < time) { 
         // while a) the touch sensor specified is not pressed, b) the left motor hasn't moved a specified number of ticks, AND c) the number of seconds specified has not elapsed, do the following:
-        if (port < black) { mav(left, 1453); mav(right, 960); } // if the specified light sensor does not see black, go forward while curving to the right
-        else if (port >= black) { mav(left, 960); mav(right, 1453); } // if the specified light sensor does see black, go forward while curving to the left
+        if (port < black) { mav(left, 1453 + drift_mod); mav(right, 960); } // if the specified light sensor does not see black, go forward while curving to the right
+        else if (port >= black) { mav(left, 960 + drift_mod); mav(right, 1453); } // if the specified light sensor does see black, go forward while curving to the left
     }
     // ^^ having so many checks can be useful to ensure you're robot doesn't go too far off course, but you'll rarely ever use all of the variables
 }
@@ -103,8 +103,8 @@ void mega_line_follow_right(int port, int touchport, int ticks, int time) {
     cmpc(right); // clear the left motor's position counter
     while (digital(touchport) == 0 && gmpc(right) < ticks && seconds() - starttime < time) {
         // while a) the touch sensor specified is not pressed, b) the left motor hasn't moved a specified number of ticks, AND c) the number of seconds specified has not elapsed, do the following:
-        if (port < black) { mav(left, 960); mav(right, 1453); } // if the specified light sensor does not see black, go forward while curving to the left
-        else if (port >= black) { mav(left, 1453); mav(right, 960); } // if the specified light sensor does see black, go forward while curving to the right
+        if (port < black) { mav(left, 960 + drift_mod); mav(right, 1453); } // if the specified light sensor does not see black, go forward while curving to the left
+        else if (port >= black) { mav(left, 1453 + drift_mod); mav(right, 960); } // if the specified light sensor does see black, go forward while curving to the right
     }
 }
 
@@ -114,8 +114,8 @@ void mega_line_follow_right(int port, int touchport, int ticks, int time) {
 void two_sensor_line_follow(int ticks) {
     cmpc(left); // clear the left motor's position counter
     while (gmpc(left) < ticks) { // while the left motor has not moved the number of ticks specified, do the following:
-        if (leftlight < black) { mav(left, 1453); } // if the left light sensor doesn't see black, full power to the left motor
-        else if (leftlight >= black) { mav(left, 960); } // if the left light sensor sees black, less power to the left motor
+        if (leftlight < black) { mav(left, 1453 + drift_mod); } // if the left light sensor doesn't see black, full power to the left motor
+        else if (leftlight >= black) { mav(left, 960 + drift_mod); } // if the left light sensor sees black, less power to the left motor
         if (rightlight < black) { mav(right, 1453); } // if the right light sensor doesn't see black, full power to the right motor
         else if (rightlight >= black) { mav(right, 960); } // if the right light sensor sees black, less power to the right motor
     }
@@ -127,8 +127,8 @@ void mega_line_follow_left_back(int port, int touchport, int ticks, int time) {
     cmpc(left); // clear the left motor's position counter
     while (digital(touchport) == 0 && abs(gmpc(left)) < ticks && seconds() - starttime < time) { // takes the absolute value of the left motor's position counter to avoid logic errors
         // while a) the touch sensor specified is not pressed, b) the left motor hasn't moved a specified number of ticks, AND c) the number of seconds specified has not elapsed, do the following:
-        if (port < black) { mav(left, -1453); mav(right, -960); } // if the specified light sensor does not see black, go backward while curving to the left
-        else if (port >= black) { mav(left, -960); mav(right, -1453); } // if the specified light sensor does see black, go backward while curving to the right
+        if (port < black) { mav(left, -1453 - drift_mod); mav(right, -960); } // if the specified light sensor does not see black, go backward while curving to the left
+        else if (port >= black) { mav(left, -960 - drift_mod); mav(right, -1453); } // if the specified light sensor does see black, go backward while curving to the right
     }
 }
 
@@ -138,8 +138,8 @@ void mega_line_follow_right_back(int port, int touchport, int ticks, int time) {
     cmpc(left); // clear the left motor's position counter
     while (digital(touchport) == 0 && abs(gmpc(left)) < ticks && seconds() - starttime < time) { // takes the absolute value of the left motor's position counter to avoid logic errors
         // while a) the touch sensor specified is not pressed, b) the left motor hasn't moved a specified number of ticks, AND c) the number of seconds specified has not elapsed, do the following:
-        if (port < black) { mav(left, -960); mav(right, -1453); } // if the specified light sensor does not see black, go backward while curving to the right
-        else if (port >= black) { mav(left, -1453); mav(right, -960); } // if the specified light sensor does see black, go backward while curving to the left
+        if (port < black) { mav(left, -960 - drift_mod); mav(right, -1453); } // if the specified light sensor does not see black, go backward while curving to the right
+        else if (port >= black) { mav(left, -1453 - drift_mod); mav(right, -960); } // if the specified light sensor does see black, go backward while curving to the left
     }
 }
 
@@ -154,8 +154,8 @@ void mega_two_sensor_line_follow(int direction, int ticks, int touchport, int ti
     cmpc(left); // clear the left motor's position counter
     while (digital(touchport) == 0 && abs(gmpc(left)) < ticks && seconds() - starttime < time) { 
         // while a) the touch sensor specified is not pressed, b) the left motor hasn't moved a specified number of ticks, AND c) the number of seconds specified has not elapsed, do the following:
-        if (leftlight < black) { mav(left, 1453*direction); } // if the left light sensor doesn't see black, full power to the left motor
-        else if (leftlight >= black) { mav(left, 960*direction); } // if the left light sensor sees black, less power to the left motor
+        if (leftlight < black) { mav(left, (1453 + drift_mod)*direction); } // if the left light sensor doesn't see black, full power to the left motor
+        else if (leftlight >= black) { mav(left, (960 + drift_mod)*direction); } // if the left light sensor sees black, less power to the left motor
         if (rightlight < black) { mav(right, 1453*direction); } // if the right light sensor doesn't see black, full power to the right motor
         else if (rightlight >= black) { mav(right, 960*direction); } // if the right light sensor sees black, less power to the right motor
     }
@@ -171,7 +171,7 @@ void smooth_line_follow(int port, int speed, int touchport) {
         int error = analog(port) - (black+white)*2/3; // determine the darkness that the light sensor sees- error is positively correlated with darkness
         float speed_mod = error * 0.03; // use the number from previous line to modify the speed of the the motors (the bigger the difference between the light sensor value and the desired value, the sharper the curve
         // the purpose of the coefficient of error is to dampen it's effect. You can change the coefficent if the robot is not making sharp enough turns
-        mav(left, speed - speed_mod); // the darker it is, the less power to the left motor
+        mav(left, speed - speed_mod + drift_mod); // the darker it is, the less power to the left motor
         mav(right, speed + speed_mod); // the darker it is, the more power to the right motor
     }
 }
