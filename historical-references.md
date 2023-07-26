@@ -1,3 +1,4 @@
+## There are a number of references to historically important years in the code 
 
 1453: the year the Ottomans under Mehmed the Conquerer took control of Constantinople/Istanbul
 1204: the year the Venetian-led fourth crusade sacked Constantinople
