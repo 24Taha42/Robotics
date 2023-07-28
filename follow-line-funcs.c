@@ -33,7 +33,7 @@ void follow_line_0() {
 // This function has 1 input: the port number of the light sensor with which you are following the line. 
 // You can input leftlight or rightlight (as you assigned them each a number) or a custom number
 void follow_line_1(int sensor_port) {
-    // this function is meant to be used inside of a loop; it will only run the following code once if not called inside of a loop
+    // !! this function is meant to be used inside of a loop; it will only run the following code once if not called inside of a loop
     if (analog(sensor_port) < black) { // if the specified light sensor does not see black, do the following:
         mav(left, 1453 + drift_mod); // go forward with the left motor at a very high speed
         mav(right, 960); // go forward with the right motor at a slower speed
