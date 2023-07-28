@@ -86,16 +86,30 @@ void follow_line_1(int sensor_port) {
     }
 }
 
-// Purpose: two-sensor black line squareup
-// Moves the robot forward at a specified {speed}, turning so that the robot is perpendicular to the black line
+// Moves the robot to square up with a black line
 // !! only works if you have two working light sensors
-void squareup(int speed){
-    // !! the larger the absolute value of speed (can be between -1500 & 1500), the less percise the square up will be
-    while (analog(leftlight) < black || analog(rightlight) < black){ // while either the left or right light sensor does not see black, do the following:
-        if (analog(leftlight) < black){ mav(left,(speed)); } // if the left light sensor does not see black, move the left motor forward 
-        else { mav(left, (-1*(speed))*0.5); } // if the left light sensor DOES see black, move the left motor backward slowly
-        if (analog(rightlight) < black){ mav(right,(speed)); } // if the right light sensor does not see black, move the right motor forward
-        else { mav(right, (-1*(speed))*0.5); } // if the left light sensor DOES see black, move the left motor backward slowly
+// This function has 1 input: the speed with which you want to arrive at the black line
+// !! the larger the absolute value of speed (can be between -1500 & 1500), the less percise the square up will be
+void squareup_light(int speed){
+    while (analog(leftlight) < black || analog(rightlight) < black){ // while either the left or right light sensor does NOT see black, do the following:
+        if (analog(leftlight) < black){ mav(left,(speed)); } // if the left light sensor does NOT see black, move the left motor at full speed 
+        else { mav(left, (-1*(speed))*0.5); } // if the left light sensor does see black, move the left motor backward slowly
+        if (analog(rightlight) < black){ mav(right,(speed)); } // if the right light sensor does NOT see black, move the right motor at full speed
+        else { mav(right, (-1*(speed))*0.5); } // if the left light sensor does see black, move the left motor backward slowly
+    }
+}
+
+// Moves the robot to square up with a solid object, but will stop trying after a certain number of seconds
+// !! only works if you have two working touch sensors
+// This function has 2 inputs: 
+// 1. the speed with which you want to arrive at the wall- the larger the absolute value of speed (can be between -1500 & 1500), the less percise the square up will be
+// 2. the amount of time you want before the robot stops trying to square up in seconds (must be a positive whole number)
+void protected_squareup_touch(int speed, int time) {
+    float starttime = seconds(); // sets the start time equal to the number of seconds since the run began
+    while ((digital(lefttouch) == 0 || digital(righttouch) == 0) && seconds()-starttime < time) { 
+        // while either the left or right touch sensor is NOT pressed AND the amount of time specified hasn't elapsed, do the following:
+        if (digital(lefttouch) == 0) { mav(left, (speed)); } // if the left touch sensor is NOT pressed, move the left motor at full speed
+        if (digital(righttouch) == 0) { mav(right, (speed)); } // if the right touch sensor is NOT pressed, move the right motor at full speed
     }
 }
 
