@@ -113,24 +113,26 @@ void protected_squareup_touch(int speed, int time) {
     }
 }
 
-// Purpose: moving a servo slowly
-// Moves a specified servo {servoNum} to a specified final position {finalPos} in a specified number of seconds (endTime}
-void servo(int servoNum, int finalPos, int endTime){
-    // the first variable specifes the port number of the servo you want to move, the second the position you want to move it to, and the last how many seconds you want it to take
-    // !! endTime must be an natural number (1,2,3,etc.)
+// Moves a servo slowly
+// This function has 3 inputs:
+// 1. The port # of the servo you are trying to move 
+// 2. The final position which you are trying to move the servo to
+// 3. The number of seconds you want the servo to take to move - must be an natural number (1,2,3,etc.)
+void servo(int servoNum, int finalPos, int endTime) {
+    if (finalPos <= 400 || finalPos >= 1900) { printf("Error: The final position inputed will damage the servo"); return; }
+    // if the final position is less than/ equal to 400 or greater than/ equal to 1900, abort the function
+   
     int startPos = get_servo_position(servoNum); // gets the starting position of the servo and assigns it to a new variable
     int currentPos = startPos; // sets the currents position of the servo equal to the start position
     double startTime = seconds(); // sets the current time equal to the number of seconds that have elapsed since the run began
     double timePercent; // creates a new variable called timePercent
-    //int waitFactor;
 
     enable_servos(); // enables the servos so they can actually move
-    while (abs(currentPos-finalPos) > 2){ // while the difference between the current and final position is greater than two, do the following:
-        timePercent = (seconds()-startTime) / (endTime); // get the amount of time that has elapsed since this function was called and divide it by the total time the function should take
-        currentPos = ((timePercent)*(finalPos-startPos)) + startPos; // calculate what position the servo should be at given the beginning position, the end position, and the time that has elapsed
-        //waitFactor = (seconds()*seconds())*0.01; 
+    while (abs(currentPos - finalPos) > 2) { // while the difference between the current and final position is greater than two, do the following:
+        timePercent = (seconds() - startTime) / (endTime); // get the amount of time that has elapsed since this function was called and divide it by the total time the function should take
+        currentPos = ((timePercent) * (finalPos - startPos)) + startPos; // calculate what position the servo should be at given the beginning position, the end position, and the time that has elapsed
 
-        set_servo_position(servoNum,currentPos); // actually set the servo position equal to the calculated value
+        set_servo_position(servoNum, currentPos); // actually set the servo position equal to the calculated value
         msleep(1); // wait a millisecond (the minimum amount of time for it to work)
     }
     disable_servos(); // disable the servos
