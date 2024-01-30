@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <kipr/wombat.h>
 
+// function to move the servo using a cubic easing
 void easingservo(int port, float finalpos, float secs){
+  
   if (finalpos < 400 || finalpos > 1900){
     printf("You're going to far. Servo range = [400,1900]");
     return;
