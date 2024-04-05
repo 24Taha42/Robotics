@@ -2,18 +2,15 @@
 #include <stdio.h>
 #include <tahafunctions.h>
 
-// start astronaut 5 cm away of the center of the pvc connector connecting to the flagpole and 1 cm right of the center of the pvc connector
+int c = 1; // not necessary
 
- 
-int c = 1;
-
-int arm = 1;
+int arm = 1; // the arm servo goes in port #1
 int armpos[4] = {1757, 1650, 1100, 360};
 // {all the way down, starting position, mostly down, all the way up}
 
-int claw = 2;
+int claw = 2; // the claw servo goes in port #2
 int clawpos[2] = {1066,500};
-// {starting position, closed astronaut}
+// {starting position, closed around astronaut}
 
 int main()
 {
@@ -24,6 +21,7 @@ int main()
     // setup
     create3_connect();
     printf("starting up");
+	// how the functions works: first parameter is the port #, second is the position  you want it to be in, third is how many seconds you want it to take
     easingservo(arm,armpos[1],1); // arm down mostly
     easingservo(claw,clawpos[0],1); // claw open
     
