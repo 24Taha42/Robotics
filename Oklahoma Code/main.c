@@ -37,21 +37,23 @@ int main()
     easingservo(arm,armpos[0],1);
 
     // close around astronaut
-	easingservo(claw,clawpos[1],2);
+    easingservo(claw,clawpos[1],2);
     
     // move arm up
     easingservo(arm,1699,1);
+
+   printf("\nastronaut secured\n");
     
     //drive straight to get the first rock
     create3_drive_straight(0.35, 0.46);
     
     // turn a teeeeneee bit to the right so that the second rock gets in the left side of the claw
-    //create3_rotate_degrees(-5, 5);
+    // create3_rotate_degrees(-5, 5);
     
-    //drive straight to get the second rock 
+    // drive straight to get the second rock 
     create3_drive_straight(0.42, 0.46);
     
-    //turn left and get the third rock as well as the rest into rock heap
+    // arc left to get the second rock
     create3_drive_arc_degrees(0.2, 54, 0.05);
     create3_wait();
     
@@ -61,7 +63,7 @@ int main()
     create3_drive_straight(0.56, 0.46);
     create3_wait();
     
-    printf("Rocks in!");
+    printf("First three rocks in!\n");
     
     //move backwards in preparation of the movement of poms
     create3_drive_straight(-0.96,0.46);
@@ -81,6 +83,8 @@ int main()
     
     // turn to knock cubes off
     create3_rotate_degrees(-24,-5);
+
+    printf("small surface stations in area 4!\n");
     
     create3_wait();
     easingservo(claw,1100,1); // open claw to drop astronaut
@@ -96,7 +100,9 @@ int main()
     easingservo(arm,armpos[3]+320,1); // lower arm so it can grab cube
     easingservo(claw,600,1); // grab cube
     easingservo(arm,armpos[3],1); // raise arm
-    
+
+    printf("small surface station in hand\n");
+	
     // turn right to move the poms back into area 4
     create3_rotate_degrees(-110,-60);
     
@@ -119,10 +125,12 @@ int main()
     create3_drive_arc_degrees(0.04, 160, 0.2);
     
     // get the last rocks into the rock heap
-    create3_drive_straight(0.53,0.46);
+    create3_drive_straight(0.56,0.46);
+
+    printf("final rocks in\n");
     
     create3_wait();
-    easingservo(claw,1400,1); // open claw to drop red cube
+    easingservo(claw,1400,1); // open claw to drop red cube (into rock heap?)
     
     
     create3_wait();
