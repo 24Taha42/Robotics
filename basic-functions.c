@@ -11,6 +11,7 @@ int righttouch = 1; // this allows you to assign a variable for the right touch 
 int white = 700; // this is the maximum value that should be returned by your analog sensors when they see white. You may need to adjust this
 int black = 3200; // this is the minimum value that should be returned by your analog sensors when they see black. You may need to adjust this
 int drift_mod = 0; // this variable exists to offset any drift your robot has. This modification is applied to the left side, so if your robot is drifting right, it should be negative and if it is drifting left it should be positive
+float ticks_per_cm = 87.1; // this variable exists to convert the distance inputed in functions to ticks. It will be different for each robot and should be calculated after dealing with drift.
 
 // Input any integer and it will return -1 if it is negative, 1 if it is positive, and 0 if it is 0
 int sign(int x){
@@ -20,7 +21,8 @@ int sign(int x){
 
 // Purpose: going straight forward or backward
 // Moves the robot a specified amount {ticks} at a specified {speed} using move at velocity mav() function
-void drive(int ticks, int speed){ // the first variable, ticks must always be positive. If you want to go backward, input speed as a negative value when calling the funciton
+void drive_straight(int dist, int speed){ // the first variable, ticks must always be positive. If you want to go backward, input speed as a negative value when calling the funciton
+    float ticks = dist*ticks_per_cm;
     cmpc(left); // clear the motor position counter for the left motor
     while (abs(gmpc(left)) < ticks){  // while the left motor has not moved the number of ticks specified when calling the funciton, do the following:
         mav(left, speed+drift_mod); // move the left motor at a speed specified when calling the function (between -1500 & 1500)
@@ -31,7 +33,7 @@ void drive(int ticks, int speed){ // the first variable, ticks must always be po
 
 // Purpose: turning left
 // Turns the robot left a specified amount {ticks} at a specified {speed} 
-void turnLeft(int ticks, int speed){ // the first variable is related to how long you want the turn to be and the second how sharp you want it to be
+void turn_left(int ticks, int speed){ // the first variable is related to how long you want the turn to be and the second how sharp you want it to be
     if (sign(speed) < 0){ right = 0; left = 9; } // This fancy math allows you to go backward and left, which is similar to turning right 
     cmpc(right); // clear the motor position counter for the right motor
     while (abs(gmpc(right)) < ticks){ // while the right motor has not moved the number of ticks specified when calling the funciton, do the following:
@@ -44,7 +46,7 @@ void turnLeft(int ticks, int speed){ // the first variable is related to how lon
 
 // Purpose: turning right
 // Turns the robot right a specified amount {ticks} at a specified {speed} 
-void turnRight(int ticks, int speed){ // the first variable is related to how long you want the turn to be and the second how sharp you want it to be
+void turn_right(int ticks, int speed){ // the first variable is related to how long you want the turn to be and the second how sharp you want it to be
     if (sign(speed) < 0){ left = 3; right = 9; } // This fancy math allows you to go backward and left, which is similar to turning right
     cmpc(left); // clear the motor position counter for the left motor 
     while (abs(gmpc(left)) < ticks){ // while the left motor has not moved the number of ticks specified when calling the funciton, do the following:
@@ -57,7 +59,7 @@ void turnRight(int ticks, int speed){ // the first variable is related to how lo
 
 // Purpose: curving to the left or right
 // Inspired by the create dirveDirect() function, this takes a {distance}, speed of the left motor {leftSpeed}, speed of the right motor {rightSpeed}, and which motor is used for motor position counting
-void driveDirect(int ticks, int leftSpeed, int rightSpeed, int countMotor){
+void drive_direct(int ticks, int leftSpeed, int rightSpeed, int countMotor){
     // the first variable, ticks, specifies how many ticks you want the robot to move
     // the second & third variables specify the speed you want the left and right motors to move at respectively
     // the fourth variable specifies the motor with which you want to count ticks (either left or right)
